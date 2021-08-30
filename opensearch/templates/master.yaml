@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "fullname" . }}-master
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    component: {{ template "fullname" . }}
+    role: master
+    team: {{ .Values.opensearch.env.TEAM  }}
+spec:
+  serviceName: {{ template "fullname" . }}-discovery
+  replicas: {{ .Values.master.replicas }}
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      component: {{ template "fullname" . }}
+      role: master
+      team: {{ .Values.opensearch.env.TEAM  }}
+  template:
+    metadata:
+      annotations:
+        config.linkerd.io/skip-ports: "9300"
+      labels:
+        component: {{ template "fullname" . }}
+        role: master
+        team: {{ .Values.opensearch.env.TEAM  }}
+        app: {{ template "fullname" . }}
+    spec:
+      serviceAccountName: {{ template "fullname" . }}
+      initContainers:
+        - name: init-mount
+          command: [ 'sh', '-c', 'chown -R 1000:1000 /usr/share/opensearch/data' ]
+          image: busybox:1.27.2
+          volumeMounts:
+            - mountPath: /usr/share/opensearch/data
+              name: storage
+      {{- if eq .Values.master.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  component: {{ template "fullname" . }}
+                  role: master
+      {{- else if eq .Values.master.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  component: {{ template "fullname" . }}
+                  role: master
+      {{- end }}
+      containers:
+      - name: {{ template "fullname" . }}-master
+        image: "{{ .Values.opensearch.image.repository }}:{{ .Values.opensearch.image.tag }}"
+        imagePullPolicy: {{ .Values.opensearch.image.pullPolicy }}
+        env:
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.initial_master_nodes
+          value: "{{ template "masternodes" . }}"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: discovery.seed_hosts
+          value: {{ template "fullname" . }}-discovery
+        {{- range $key, $value := .Values.opensearch.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- range $key, $value := .Values.master.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.master.resources | indent 10 }}
+        ports:
+        - containerPort: 9300
+          name: transport
+          protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: 9300
+          initialDelaySeconds: 240
+          periodSeconds: 10
+        volumeMounts:
+          - mountPath: /usr/share/opensearch/data
+            name: storage
+{{ if .Values.opensearch.security.enabled }}
+{{ toYaml .Values.opensearch.security.volumeMounts | indent 10 }}
+      volumes:
+        - name: certs
+          secret:
+            secretName: {{ template "fullname" . }}-certs
+        - name: config
+          secret:
+            secretName: {{ template "fullname" . }}-config
+{{- end }}
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+    spec:
+      storageClassName: {{ .Values.opensearch.stateful.class }}
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.master.stateful.size }}

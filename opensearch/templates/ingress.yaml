@@ -1,0 +1,28 @@
+{{- if .Values.ingress -}}
+{{- $host := printf "%s.%s" (include "fullname" .) .Values.ingress.domain -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingress.domain }}
+    "helm.sh/resource-policy": keep
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    component: {{ template "fullname" . }}
+    team: {{ .Values.opensearch.env.TEAM }}
+spec:
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ template "fullname" . }}
+              servicePort: 9200
+            path: /
+{{- end -}}

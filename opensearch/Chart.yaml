@@ -1,0 +1,10 @@
+apiVersion: v1
+name: opensearch
+home: https://github.com/navikt/arbeidsplassen-opensearch
+version: 1.0
+description: Helm chart for opensearch
+sources:
+  - https://github.com/navikt/arbeidsplassen-opensearch
+maintainers:
+  - name: Tuan Tran
+    email: dinh.anh.tuan.tran@nav.no

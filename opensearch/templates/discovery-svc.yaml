@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-discovery
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    component: {{ template "fullname" . }}
+    role: master
+    team: {{ .Values.opensearch.env.TEAM  }}
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  publishNotReadyAddresses: true
+  selector:
+    component: {{ template "fullname" . }}
+    role: master
+  ports:
+  - name: http-rest
+    port: 9200
+  - name: tcp-transport
+    port: 9300
+    protocol: TCP

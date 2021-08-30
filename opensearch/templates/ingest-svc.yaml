@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    component: {{ template "fullname" . }}
+    role: ingest
+    team: {{ .Values.opensearch.env.TEAM  }}
+spec:
+  type: {{ .Values.opensearch.serviceType }}
+  selector:
+    component: {{ template "fullname" . }}
+    role: ingest
+    team: {{ .Values.opensearch.env.TEAM  }}
+  ports:
+  - name: http-rest
+    port: 9200
+    protocol: TCP
+  - name: tcp-transport
+    port: 9300
+    protocol: TCP
+  - name: tcp-metrics
+    port: 9600
+
+
+

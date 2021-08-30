@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-ingest
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    component: {{ template "fullname" . }}
+    role: ingest
+    team: {{ .Values.opensearch.env.TEAM }}
+spec:
+  replicas: {{ .Values.ingest.replicas }}
+  selector:
+    matchLabels:
+      component: {{ template "fullname" . }}
+      role: ingest
+      team: {{ .Values.opensearch.env.TEAM }}
+  template:
+    metadata:
+      labels:
+        component: {{ template "fullname" . }}
+        role: ingest
+        team: {{ .Values.opensearch.env.TEAM }}
+        app: {{ template "fullname" . }}
+    spec:
+      serviceAccountName: {{ template "fullname" . }}
+      {{- if eq .Values.ingest.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  component: {{ template "fullname" . }}
+                  role: ingest
+      {{- else if eq .Values.ingest.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  component: {{ template "fullname" . }}
+                  role: ingest
+      {{- end }}
+      containers:
+      - name: {{ template "fullname" . }}-ingest
+        image: "{{ .Values.opensearch.image.repository }}:{{ .Values.opensearch.image.tag }}"
+        imagePullPolicy: {{ .Values.opensearch.image.pullPolicy }}
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: discovery.seed_hosts
+          value: {{ template "fullname" . }}-discovery
+        {{- range $key, $value :=  .Values.opensearch.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        {{- range $key, $value :=  .Values.ingest.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.ingest.resources | indent 10 }}
+        ports:
+        - containerPort: 9200
+          name: http
+          protocol: TCP
+        - containerPort: 9300
+          name: transport
+          protocol: TCP
+        - containerPort: 9600
+          name: metrics
+          protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: 9300
+          initialDelaySeconds: 20
+{{- if .Values.opensearch.security.enabled }}
+        volumeMounts:
+{{ toYaml .Values.opensearch.security.volumeMounts | indent 10 }}
+      volumes:
+        - name: certs
+          secret:
+            secretName: {{ template "fullname" . }}-certs
+        - name: config
+          secret:
+            secretName: {{ template "fullname" . }}-config
+{{- end }}
