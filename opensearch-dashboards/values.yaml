@@ -1,0 +1,29 @@
+dashboards:
+  serviceType: ClusterIP
+  replicas: 2
+  env:
+    TEAM: "teamname"
+    cluster.name: "milkyway"
+    http.compression: "true"
+    network.host: "0.0.0.0"
+    cluster.routing.allocation.disk.threshold_enabled: "false"
+    plugins.security.disabled: "true"
+    plugins.security.ssl.http.enabled: "false"
+  image:
+    repository: opensearchproject/opensearch-dashboards
+    tag: 1.0.0
+    pullPolicy: IfNotPresent
+  ssl:
+    http:
+      enabled: false
+  security:
+    enabled: false
+
+opensearch:
+  host: arbeidsplassen-opensearch
+
+ingress:
+  domain: localhost
+
+env:
+  cluster: docker-desktop

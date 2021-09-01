@@ -1,5 +1,9 @@
 opensearch:
   serviceType: ClusterIP
+  security:
+    enabled: false
+    linkerd:
+      enabled: false
   env:
     TEAM: "teamname"
     cluster.name: "milkyway"
@@ -79,7 +83,7 @@ opensearch:
         _meta:
           type: "roles"
           config_version: 2
-        kibana_read_only:
+        opensearch-dashboard_read_only:
           reserved: true
         security_rest_api_access:
           reserved: true
@@ -135,11 +139,11 @@ opensearch:
           reserved: false
           backend_roles:
           - "logstash"
-        kibana_user:
+        opensearch-dashboard_user:
           reserved: false
           backend_roles:
-          - "kibanauser"
-          description: "Maps kibanauser to kibana_user"
+          - "opensearch-dashboarduser"
+          description: "Maps opensearch-dashboarduser to opensearch-dashboard_user"
         readall:
           reserved: false
           backend_roles:
@@ -148,10 +152,10 @@ opensearch:
           reserved: false
           backend_roles:
           - "snapshotrestore"
-        kibana_server:
+        opensearch-dashboard_server:
           reserved: true
           users:
-          - "kibanaserver"
+          - "opensearch-dashboardserver"
         monitor:
           reserved: false
           users:
