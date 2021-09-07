@@ -13,7 +13,7 @@ opensearch:
     plugins.security.disabled: "true"
     plugins.security.ssl.http.enabled: "false"
   image:
-    repository: opensearchproject/opensearch
+    repository: pam-opensearch
     tag: 1.0.0
     pullPolicy: IfNotPresent
   stateful:

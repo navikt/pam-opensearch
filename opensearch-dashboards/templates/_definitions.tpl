@@ -1,5 +1,5 @@
 {{- define "fullname" -}}
-{{- printf "%s-%s" .Release.Name .Chart.Name -}}
+{{- printf "%s" .Release.Name -}}
 {{- end -}}
 
 
