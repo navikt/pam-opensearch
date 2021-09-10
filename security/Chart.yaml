@@ -1,0 +1,10 @@
+apiVersion: v1
+name: opensearch-security
+home: https://github.com/navikt/pam-opensearch
+version: 1.0
+description: Helm chart for opensearch
+sources:
+  - https://github.com/navikt/pam-opensearch
+maintainers:
+  - name: Tuan Tran
+    email: dinh.anh.tuan.tran@nav.no

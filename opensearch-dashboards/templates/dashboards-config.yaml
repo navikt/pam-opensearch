@@ -14,10 +14,10 @@ data:
     server.host: "0.0.0.0"
   {{- if .Values.dashboards.security.enabled }}
     opensearch.ssl.verificationMode: none
-    opensearch.username: dashboardsserver
+    opensearch.username: kibanaserver
     opensearch.password: {{ .Values.dashboards.password }}
     opensearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
     opensearch_security.multitenancy.enabled: true
     opensearch_security.multitenancy.tenants.preferred: ["Private", "Global"]
-    opensearch_security.readonly_mode.roles: ["opensearch-dashboard_read_only"]
+    opensearch_security.readonly_mode.roles: ["kibana_read_only"]
   {{- end }}

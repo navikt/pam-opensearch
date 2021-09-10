@@ -74,6 +74,12 @@ spec:
         - name: {{ $key }}
           value: {{ $value | quote }}
         {{- end }}
+        {{- if not .Values.opensearch.security.enabled }}
+        - name: plugins.security.disabled
+          value: "true"
+        - name: plugins.security.ssl.http.enabled
+          value: "false"
+        {{- end }}
         resources:
 {{ toYaml .Values.ingest.resources | indent 10 }}
         ports:
