@@ -1,23 +1,9 @@
 opensearch:
   serviceType: ClusterIP
   security:
-    enabled: false
+    enabled: true
     linkerd:
-      enabled: false
-  env:
-    TEAM: "teamname"
-    cluster.name: "milkyway"
-    http.compression: "true"
-    network.host: "0.0.0.0"
-    cluster.routing.allocation.disk.threshold_enabled: "false"
-  image:
-    repository: pam-opensearch
-    tag: 1.0.0
-    pullPolicy: IfNotPresent
-  stateful:
-    class: "hostpath"
-    password:
-      hash: "changeme"
+      enabled: true
     volumeMounts:
       - name: certs
         mountPath: "/usr/share/opensearch/config/node.pem"
@@ -56,6 +42,20 @@ opensearch:
         mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/roles_mapping.yml
         subPath: roles_mapping.yml
 
+  env:
+    TEAM: "teamname"
+    cluster.name: "milkyway"
+    http.compression: "true"
+    network.host: "0.0.0.0"
+    cluster.routing.allocation.disk.threshold_enabled: "false"
+  image:
+    repository: pam-opensearch
+    tag: 1.0.1
+    pullPolicy: IfNotPresent
+  stateful:
+    class: "hostpath"
+    password:
+      hash: "changeme"
 master:
   replicas: 3
   antiAffinity: "soft"

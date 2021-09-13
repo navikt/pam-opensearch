@@ -107,7 +107,7 @@ spec:
         volumeMounts:
           - mountPath: /usr/share/opensearch/data
             name: storage
-{{ if .Values.opensearch.security.enabled }}
+{{- if .Values.opensearch.security.enabled }}
 {{ toYaml .Values.opensearch.security.volumeMounts | indent 10 }}
       volumes:
         - name: certs
