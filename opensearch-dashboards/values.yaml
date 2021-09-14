@@ -10,7 +10,7 @@ dashboards:
     opensearch.password: "changeme"
   image:
     repository: opensearchproject/opensearch-dashboards
-    tag: 1.0.1
+    tag: 1.0.0
     pullPolicy: IfNotPresent
   ssl:
     http:
@@ -20,7 +20,7 @@ dashboards:
 
 opensearch:
   host: "arbeidsplassen-opensearch"
-  release: "arbeidsplassen-opensearch"
+  releasename: "arbeidsplassen-opensearch"
 
 ingress:
   domain: localhost

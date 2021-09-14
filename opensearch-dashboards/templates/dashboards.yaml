@@ -23,15 +23,15 @@ spec:
         app: {{ template "fullname" . }}
     spec:
       serviceAccountName: {{ template "fullname" . }}
-      volumes:
 {{- if .Values.dashboards.security.enabled }}
+      volumes:
       - name: certs
         secret:
-          secretName: {{ .Values.dashboards.opensearch.releasename }}-certs
+          secretName: {{ .Values.opensearch.releasename }}-certs
       - name: config
         secret:
-          secretName: {{ .Values.dashboards.opensearch.releasename }}-config
-{{- end }
+          secretName: {{ .Values.opensearch.releasename }}-config
+{{- end }}
       containers:
       - name: {{ template "fullname" . }}
         image: {{ .Values.dashboards.image.repository }}
@@ -70,8 +70,8 @@ spec:
         - containerPort: 5601
           name: dashboards
           protocol: TCP
-        volumeMounts:
 {{- if .Values.dashboards.security.enabled }}
+        volumeMounts:
         - mountPath: /usr/share/opensearch-dashboards/config/node.pem
           name: certs
           subPath: node.pem
