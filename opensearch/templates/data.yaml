@@ -9,7 +9,6 @@ metadata:
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
     role: data
-    team: {{ .Values.opensearch.env.TEAM }}
 spec:
   serviceName: {{ template "fullname" . }}-data
   replicas: {{ .Values.data.replicas }}
@@ -18,7 +17,7 @@ spec:
     matchLabels:
       component: {{ template "fullname" . }}
       role: data
-      team: {{ .Values.opensearch.env.TEAM }}
+      app: {{ template "fullname" . }}
   template:
     metadata:
       annotations:
@@ -26,7 +25,6 @@ spec:
       labels:
         component: {{ template "fullname" . }}
         role: data
-        team: {{ .Values.opensearch.env.TEAM }}
         app: {{ template "fullname" . }}
     spec:
       serviceAccountName: {{ template "fullname" . }}

@@ -9,20 +9,18 @@ metadata:
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
     role: ingest
-    team: {{ .Values.opensearch.env.TEAM }}
 spec:
   replicas: {{ .Values.ingest.replicas }}
   selector:
     matchLabels:
       component: {{ template "fullname" . }}
       role: ingest
-      team: {{ .Values.opensearch.env.TEAM }}
+      app: {{ template "fullname" . }}
   template:
     metadata:
       labels:
         component: {{ template "fullname" . }}
         role: ingest
-        team: {{ .Values.opensearch.env.TEAM }}
         app: {{ template "fullname" . }}
     spec:
       serviceAccountName: {{ template "fullname" . }}

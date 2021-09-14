@@ -9,7 +9,6 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
-    team: {{ .Values.opensearch.env.TEAM }}
 spec:
   podSelector:
     matchLabels:

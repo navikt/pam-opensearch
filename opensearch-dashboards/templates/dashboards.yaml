@@ -27,11 +27,11 @@ spec:
 {{- if .Values.dashboards.security.enabled }}
       - name: certs
         secret:
-          secretName: {{ template "fullname" . }}-certs
-{{- end }}
+          secretName: {{ .Values.dashboards.opensearch.releasename }}-certs
       - name: config
-        configMap:
-          name: {{ template "fullname" . }}-config
+        secret:
+          secretName: {{ .Values.dashboards.opensearch.releasename }}-config
+{{- end }
       containers:
       - name: {{ template "fullname" . }}
         image: {{ .Values.dashboards.image.repository }}
@@ -81,8 +81,9 @@ spec:
         - mountPath: /usr/share/opensearch-dashboards/config/root-ca.pem
           name: certs
           subPath: root-ca.pem
-{{- end }}
         - mountPath: /usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
           name: config
           subPath: opensearch_dashboards.yml
+{{- end }}
+
 

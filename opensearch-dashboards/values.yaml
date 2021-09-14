@@ -2,23 +2,25 @@ dashboards:
   serviceType: ClusterIP
   replicas: 2
   env:
-    TEAM: "teamname"
     cluster.name: "milkyway"
     http.compression: "true"
     network.host: "0.0.0.0"
     cluster.routing.allocation.disk.threshold_enabled: "false"
+    opensearch.username: "kibanaserver"
+    opensearch.password: "changeme"
   image:
     repository: opensearchproject/opensearch-dashboards
-    tag: 1.0.0
+    tag: 1.0.1
     pullPolicy: IfNotPresent
   ssl:
     http:
       enabled: false
   security:
-    enabled: false
+    enabled: enabled
 
 opensearch:
-  host: arbeidsplassen-opensearch
+  host: "arbeidsplassen-opensearch"
+  release: "arbeidsplassen-opensearch"
 
 ingress:
   domain: localhost

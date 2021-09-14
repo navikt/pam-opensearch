@@ -8,12 +8,9 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
-    role: data
-    team: {{ .Values.opensearch.env.TEAM }}
 spec:
   minAvailable: {{ sub .Values.data.replicas 1 }}
   selector:
     matchLabels:
       component: {{ template "fullname" . }}
       role: data
-      team: {{ .Values.opensearch.env.TEAM }}

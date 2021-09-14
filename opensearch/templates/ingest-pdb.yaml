@@ -9,11 +9,9 @@ metadata:
     heritage: "{{ .Release.Service }}"
     component: {{ template "fullname" . }}
     role: ingest
-    team: {{ .Values.opensearch.env.TEAM }}
 spec:
   minAvailable: {{ sub .Values.ingest.replicas 1 }}
   selector:
     matchLabels:
       component: {{ template "fullname" . }}
       role: ingest
-      team: {{ .Values.opensearch.env.TEAM }}
