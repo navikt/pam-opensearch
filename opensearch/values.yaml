@@ -21,12 +21,6 @@ opensearch:
       - name: certs
         mountPath: "/usr/share/opensearch/config/admin-key.pem"
         subPath: admin-key.pem
-      - name: certs
-        mountPath: "/usr/share/opensearch/config/kibanaserver.pem"
-        subPath: monitor.pem
-      - name: certs
-        mountPath: "/usr/share/opensearch/config/kibanaserver-key.pem"
-        subPath: monitor-key.pem
       - name: config
         mountPath: /usr/share/opensearch/config/opensearch.yml
         subPath: opensearch.yml
