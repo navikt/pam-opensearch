@@ -47,8 +47,7 @@ opensearch:
     pullPolicy: IfNotPresent
   stateful:
     class: "hostpath"
-    password:
-      hash: "changeme"
+
 master:
   replicas: 3
   antiAffinity: "soft"
