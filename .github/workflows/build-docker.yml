@@ -15,5 +15,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION=$(cat docker/version)
-          IMAGE_TAG=ghcr.io/$GITHUB_REPOSITORY:$VERSION
+          DOCKER_REPO=ghcr.io
+          IMAGE_TAG=$DOCKER_REPO/$GITHUB_REPOSITORY:$VERSION
           echo $IMAGE_TAG
+          echo $GITHUB_TOKEN | docker login --username $GITHUB_REPOSITORY --password-stdin $DOCKER_REPO
+          docker build . --pull -t $IMAGE_TAG
