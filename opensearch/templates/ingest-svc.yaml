@@ -4,6 +4,9 @@ metadata:
   name: {{ template "fullname" . }}
   annotations:
     "helm.sh/resource-policy": keep
+    prometheus.io/path: /_prometheus/metrics
+    prometheus.io/port: http
+    prometheus.io/scrape: "true"
   labels:
     app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
