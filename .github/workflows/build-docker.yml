@@ -1,0 +1,19 @@
+name: build-docker
+on:
+  push:
+    paths:
+      - 'docker/version'
+    branches:
+      - main
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build docker image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(cat docker/version)
+          IMAGE_TAG=ghcr.io/$GITHUB_REPOSITORY:$VERSION
+          echo $IMAGE_TAG

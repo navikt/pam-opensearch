@@ -23,7 +23,7 @@ Set the limits with following command:
 > export OPENSEARCH_NAMESPACE=teampam
 > ../scripts/generate_certs.sh
 > ../scripts/generate_kubernetes_secrets.sh <changeme>
-> ../scripts/deploy-opensearch.sh 
+> ../scripts/deploy-opensearch.sh <path.to.values.yaml>
 ```
 
 ### Install Dashbards with:
@@ -31,7 +31,7 @@ Set the limits with following command:
 > cd opensearch-dashbards
 > export DASHBOARDS_RELEASE=arbeidsplassen-dashboards
 > export DASHBOARDS_NAMESPACE=teampam
-> ../scripts/deploy-dashboards.sh 
+> ../scripts/deploy-dashboards.sh <path.to.values.yaml>
 ```
 
 ## Deploy to production:
