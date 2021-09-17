@@ -2,6 +2,7 @@ name: build-docker
 on:
   push:
     paths:
+      - 'docker/**'
     branches:
       - main
 jobs:
@@ -20,3 +21,4 @@ jobs:
           echo $GITHUB_TOKEN | docker login --username $GITHUB_REPOSITORY --password-stdin $DOCKER_REPO
           cd docker
           docker build . --pull -t $IMAGE_TAG
+          docker push $IMAGE_TAG
