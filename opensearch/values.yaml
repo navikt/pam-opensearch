@@ -42,7 +42,7 @@ opensearch:
     network.host: "0.0.0.0"
     cluster.routing.allocation.disk.threshold_enabled: "false"
   image:
-    repository: pam-opensearch
+    repository: ghcr.io/navikt/pam-opensearch
     tag: 1.0.1
     pullPolicy: IfNotPresent
   stateful:
