@@ -10,7 +10,7 @@ if [[ -z $CLUSTER ]]; then
 fi
 
 SCRIPTPATH=$(dirname $(realpath -s $0))
-cd $SCRIPTPATH/..
+cd $SCRIPTPATH/../security
 mkdir -p .secrets/$CLUSTER
 cd .secrets/$CLUSTER
 
