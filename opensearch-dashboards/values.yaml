@@ -16,7 +16,7 @@ dashboards:
     http:
       enabled: false
   security:
-    enabled: enabled
+    enabled: false
 
 opensearch:
   host: "arbeidsplassen-opensearch"
@@ -25,5 +25,3 @@ opensearch:
 ingress:
   domain: localhost
 
-env:
-  cluster: docker-desktop
