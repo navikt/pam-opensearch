@@ -2,10 +2,6 @@ dashboards:
   serviceType: ClusterIP
   replicas: 2
   env:
-    cluster.name: "milkyway"
-    http.compression: "true"
-    network.host: "0.0.0.0"
-    cluster.routing.allocation.disk.threshold_enabled: "false"
     opensearch.username: "kibanaserver"
     opensearch.password: "changeme"
   image:
