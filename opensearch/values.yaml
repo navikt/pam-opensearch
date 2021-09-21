@@ -1,5 +1,4 @@
 opensearch:
-
   serviceType: ClusterIP
   security:
     enabled: true
@@ -91,6 +90,5 @@ data:
 
 ingress:
   domain: localhost
+  class: gw-localhost
 
-env:
-  cluster: docker-desktop
