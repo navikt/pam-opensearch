@@ -9,8 +9,8 @@ dashboards:
       cpu: 100m
       memory: 128Mi
   env:
-    opensearch.username: "kibanaserver"
-    opensearch.password: "changeme"
+    OPENSEARCH_USERNAME: "kibanaserver"
+    OPENSEARCH_PASSWORD: "changeme"
   image:
     repository: ghcr.io/navikt/pam-opensearch-dashboards:1.0.0
     pullPolicy: IfNotPresent
@@ -19,6 +19,8 @@ dashboards:
       enabled: false
   security:
     enabled: true
+    linkerd:
+      enabled: true
 
 opensearch:
   host: "arbeidsplassen-opensearch"
