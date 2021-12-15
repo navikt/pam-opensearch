@@ -45,7 +45,7 @@ When running with linkerd, it will create a networkpolicy, you need to change th
 
 ## Security
 Security is now enabled by default. 
-Opensearch supports a varity of authentication and authorization protocols like LDAP, Kerberos, SAML, OpenID and [more](https://opensearch.org/docs/security-plugin/index/). 
+Opensearch supports a variety of authentication and authorization protocols like LDAP, Kerberos, SAML, OpenID and [more](https://opensearch.org/docs/security-plugin/index/). 
 By default this installation creates a list of internal users with passwords. NOTE by convenient all users is set to the same password on startup, 
 you can change this by logging into Dashboards and change the password [there](https://aws.amazon.com/blogs/opensource/change-passwords-open-distro-for-elasticsearch/). 
 
@@ -54,7 +54,8 @@ Use the script generate_certs.sh to generate self signed certs:
 > ./scripts/generate_certs.sh
 ```
 
-The script creates all keys necessary needed for this setup, and are placed under .secrets/ folder. Keep root-ca-key.pem and root-ca.pem incase you need to add more keys and need to sign them.
+The script creates all keys necessary needed for this setup, and are placed under .secrets/ folder. 
+Keep root-ca-key.pem and root-ca.pem in case you need to add more keys and need to sign them.
 
 Apply the secrets to kubernetes using following command:
 

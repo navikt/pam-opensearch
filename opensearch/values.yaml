@@ -42,7 +42,7 @@ opensearch:
     cluster.routing.allocation.disk.threshold_enabled: "false"
   image:
     repository: ghcr.io/navikt/pam-opensearch
-    tag: 1.0.1
+    tag: 1.2.1
     pullPolicy: IfNotPresent
   stateful:
     class: "hostpath"
